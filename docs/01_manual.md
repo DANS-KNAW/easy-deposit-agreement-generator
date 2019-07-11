@@ -63,16 +63,12 @@ ARGUMENTS
 
 INSTALLATION AND CONFIGURATION
 ------------------------------
+The preferred way of install this module is using the RPM package. This will install the binaries to
+`/opt/dans.knaw.nl/easy-deposit-agreement-generator`, the configuration files to `/etc/opt/dans.knaw.nl/easy-deposit-agreement-generator`,
+and will install the service script for `initd` or `systemd`.
 
-
-1. Unzip the tarball to a directory of your choice, e.g. /opt/
-2. A new directory called easy-deposit-agreement-generator-<version> will be created
-3. Add the command script to your `PATH` environment variable by creating a symbolic link to it from a directory that is
-   on the path, e.g. 
-   
-        ln -s /opt/easy-deposit-agreement-generator-<version>/bin/easy-deposit-agreement-generator /usr/bin
-
-
+If you are on a system that does not support RPM, you can use the tarball. You will need to copy the
+service scripts to the appropriate locations yourself.
 
 General configuration settings can be set in `src/main/assembly/dist/cfg/appliation.properties` and logging can be configured
 in `src/main/assembly/dist/cfg/logback.xml`. The available settings are explained in comments in aforementioned files.
