@@ -2,7 +2,7 @@ openapi: 3.0.1
 
 servers:
   - description: Debug environment
-    url: http://localhost:<TODO:portnumber>/
+    url: http://localhost:20210/
   - description: Local Vagrant machine
     url: http://test.dans.knaw.nl
 info:
