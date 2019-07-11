@@ -19,7 +19,7 @@ TABLE OF CONTENTS
 SYNOPSIS
 --------
 
-    easy-deposit-agreement-generator [ -s ] <datasetID> <agreement-file>
+    easy-deposit-agreement-generator [ -p ] <agreement-request-file> <agreement-file>
 
 
 DESCRIPTION
@@ -45,19 +45,20 @@ During development we therefore require a different script than the one that is 
 1. In `application.properties` set `pdf.script=localrun.sh`;
 2. In `localrun.sh` fill in the variables `USER_HOST` and `PRIVATE_KEY`.
 
-A `--sample` or `-s` flag can be added to the command line tool to signal that a 'sample agreement' needs to be created. This version of the agreement
-can be created when the DOI is not yet calculated. Also in the title of the agreement it is clearly indicated that this version is a *sample*.
+A `--preview` or `-p` flag can be added to the command line tool to signal that a 'preview agreement' needs to be created. This version of the agreement
+can be created when the deposit has net yet been submitted. Also in the title of the agreement it is clearly indicated that this version is a *sample*.
 
 ARGUMENTS
 ---------
 
-     -s, --sample    Indicates whether or not a sample agreement needs to be created
+     -p, --preview    Indicates whether or not the agreement is a preview
      -h, --help      Show help message
      -v, --version   Show version of this program
     
     trailing arguments:
-     dataset-id (required)     The ID of the dataset of which a agreement has to be created
+     agreement-request-file (required) The json file with the metadata this agreement is build for
      agreement-file (required)   The file location where the agreement needs to be stored
+     
 
 
 INSTALLATION AND CONFIGURATION
