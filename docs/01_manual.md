@@ -25,11 +25,8 @@ SYNOPSIS
 DESCRIPTION
 -----------
 
-A command line tool that creates a pdf document containing the deposit agreement for a given dataset. The tool searches for a dataset that corresponds 
-to the given `datasetID` and uses the metadata of this dataset, as well as the personal data of the depositor to generate the deposit agreement.
-
-**Note:** the dataset needs to be in Fedora already. Newly created datasets (for example from `easy-split-multi-deposit`) need to be ingested 
-by EASY first before generating the deposit agreement.
+A command line tool that creates a pdf document containing the deposit agreement for a given dataset. 
+The tool uses the provided metadata on the dataset and the depositor to generate the deposit agreement.
 
 `easy-deposit-agreement-generator` uses a template with placeholders. After replacing the placeholders with actual data, the template is converted into a PDF file.
 
@@ -46,7 +43,7 @@ During development we therefore require a different script than the one that is 
 2. In `localrun.sh` fill in the variables `USER_HOST` and `PRIVATE_KEY`.
 
 A `--preview` or `-p` flag can be added to the command line tool to signal that a 'preview agreement' needs to be created. This version of the agreement
-can be created when the deposit has net yet been submitted. Also in the title of the agreement it is clearly indicated that this version is a *sample*.
+can be created when the deposit has net yet been submitted. Also in the title of the agreement it is clearly indicated that this version is a *preview*.
 
 ARGUMENTS
 ---------
