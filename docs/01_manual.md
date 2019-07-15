@@ -19,7 +19,7 @@ TABLE OF CONTENTS
 SYNOPSIS
 --------
 
-    easy-deposit-agreement-generator [ -p ] <agreement-request-file> <agreement-file>
+    easy-deposit-agreement-generator [ -p ] -i <agreement-request-file> -o <agreement-file>
 
 
 DESCRIPTION
@@ -35,12 +35,7 @@ files that are specified in `src/main/assembly/dist/res/template/`. Besides data
 are required, namely `dans_logo.png`, `agreement_version.txt`, `Metadataterms.properties` and `velocity-engine.properties`.
 
 Pdf generation based on the assembled HTML is done using the command line tool [WeasyPrint](http://weasyprint.org/). Note that this tool 
-requires to be installed before being used by `easy-deposit-agreement-generator`. In order to not having this installed on our computers while developing 
-on this project or projects that depend on this project, we use an SSH connection to the development server where the command gets executed. 
-During development we therefore require a different script than the one that is used in production. Follow the steps below:
-
-1. In `application.properties` set `pdf.script=localrun.sh`;
-2. In `localrun.sh` fill in the variables `USER_HOST` and `PRIVATE_KEY`.
+requires to be installed before being used by `easy-deposit-agreement-generator`. 
 
 A `--preview` or `-p` flag can be added to the command line tool to signal that a 'preview agreement' needs to be created. This version of the agreement
 can be created when the deposit has net yet been submitted. Also in the title of the agreement it is clearly indicated that this version is a *preview*.
@@ -48,15 +43,12 @@ can be created when the deposit has net yet been submitted. Also in the title of
 ARGUMENTS
 ---------
 
-     -p, --preview    Indicates whether or not the agreement is a preview
+     -p, --preview   Indicates whether or not the agreement is a preview, default is false
+     -i, --input     The location of the JSON file containing the request
+     -o, --output    The location for resulting PDF containing the Deposit Agreement
      -h, --help      Show help message
      -v, --version   Show version of this program
     
-    trailing arguments:
-     agreement-request-file (required) The json file with the metadata this agreement is build for
-     agreement-file (required)   The file location where the agreement needs to be stored
-     
-
 
 INSTALLATION AND CONFIGURATION
 ------------------------------
