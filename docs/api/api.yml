@@ -57,16 +57,8 @@ paths:
 
 components:
   responses:
-    Unauthorized:
-      description: Unauthorized.
     InternalServerError:
       description: Internal Server Error.
-    MalformedAgreementRequest:
-      description: Bad Request. The agreementRequest contains invalid metadata.
-    MalformedMetadata:
-      description: Bad request. The metadata document is not valid JSON or contains fields not defined in the metadata model.
-    MalformedDepositor:
-      description: Bad Request. The depositor document is not valid JSON or is not complete
 
   schemas:
     AgreementRequest:
