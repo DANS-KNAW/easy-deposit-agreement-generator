@@ -52,12 +52,6 @@ paths:
           description: OK
           content:
             'application/pdf': {}
-        400.1:
-          $ref: "#/components/responses/MalformedMetadata"
-        400.2:
-          $ref: "#/components/responses/MalformedDepositor"
-        400.3:
-          $ref: "#/components/responses/MalformedAgreementRequest"
         500:
           $ref: "#/components/responses/InternalServerError"
 
@@ -78,198 +72,83 @@ components:
     AgreementRequest:
       type: object
       additionalProperties: false
+      required:
+        - depositor
+        - doi
+        - title
+        - dateSubmitted
+        - dateAvailable
+        - accessCategory
+        - license
+        - sample
+        - agreementVersion
+        - agreementLanguage
       properties:
-        deposit:
-          $ref: "#/components/schemas/DatasetMetadata"
         depositor:
           $ref: "#/components/schemas/Depositor"
-        agreementVersion:
+        doi:
+          type: string
+        title:
+          type: string
+        dateSubmitted:
+          type: string
+          format: date-time
+        dateAvailable:
+          type: string
+          format: date-time
+        accessCategory:
           type: string
           enum:
-            - 4.0
+            - ANONYMOUS_ACCESS
+            - OPEN_ACCESS_FOR_REGISTERED_USERS
+            - GROUP_ACCESS
+            - REQUEST_PERMISSION
+            - ACCESS_ELSEWHERE
+            - NO_ACCESS
+            - FREELY_AVAILABLE
+            - OPEN_ACCESS
+        license:
+          type: string
+        sample:
+          type: boolean
+          description: Whether the resulting Agreement is a sample (true), or a final Agreement (false)
+        agreementVersion:
+          type: string
+          description: The agreement version to be used
+          enum:
+            - "4.0"
         agreementLanguage:
           type: string
+          description: The language of the agreement to be used
           enum:
             - EN
             - NL
-        isAgreementPreview:
-          $ref: "#/components/schemas/IsPreview"
     Depositor:
       type: object
-        additionalProperties: false
-        required:
-          - name
-          - email
-          - organisation
-          - postalCode
-          - postalAddress
-          - city
-          - country
-        properties:
-          name:
-            type: string
-          organisation:
-            type: string
-          postalAddress:
-            type: string
-          postalCode:
-            type: string
-          city:
-            type: string
-          country:
-            type: string
-          telNo:
-            type: string
-          email:
-            type: string
-    DatasetMetadata:
-      type: object
       additionalProperties: false
-      properties:
-        # Basic information
-        identifiers:
-          type: array
-          items:
-            $ref: "#/components/schemas/SchemedValue"
-        titles:
-          type: array
-          items:
-            type: string
-          example:
-            - "Title 1"
-            - "Title 2"
-        creators:
-          type: array
-          items:
-            $ref: "#/components/schemas/Author"
-
-        dates:
-          type: array
-          items:
-            $ref: "#/components/schemas/Date"
-
-
-        # Licence and access
-        publishers:
-          $ref: "#/components/schemas/StringArray"
-        accessRights:
-          $ref: "#/components/schemas/AccessRights"
-        license:
-          type: string
-          format: url
-
-
-        # For the data manager
-        privacySensitiveDataPresent:
-          type: string
-          enum:
-            - yes
-            - no
-            - unspecified
-        acceptDepositAgreement:
-          type: boolean
-
-    # Components of DatasetMetadata below
-
-    AccessRights:
-      type: string
-      enum:
-        - OPEN_ACCESS
-        - REQUEST_PERMISSION
-    SchemedValue:
-      type: object
       required:
-        - scheme
-        - value
+        - name
+        - address
+        - zipcode
+        - city
+        - country
+        - organisation
+        - phone
+        - email
       properties:
-        scheme:
+        name:
           type: string
-        value:
+        address:
           type: string
-
-    Author:
-      type: object
-      properties:
-        titles:
+        zipcode:
           type: string
-        initials:
+        city:
           type: string
-        insertions:
+        country:
           type: string
-        surname:
+        organisation:
           type: string
-        role:
-          $ref: "#/components/schemas/SchemedKeyValue"
-        ids:
-          type: array
-          items:
-            $ref: "#/components/schemas/SchemedValue"
-        organization:
+        phone:
           type: string
-      oneOf:
-        - required:
-            - surname
-            - initials
-        - required:
-            - organization
-      example:
-        titles: Prof Dr
-        initials: A
-        insertions:
-        surname: Einstein
-        role:
-          - scheme: datacite:contributorType
-          - key: DataManager
-          - value: "Data Manager"
-        ids:
-          - scheme: DAI
-            value: "123456789x"
-          - scheme: ISNI
-            value: "ISNI:000000012281955X"
-        organization: University of Zurich
-
-    Date:
-      type: object
-      required:
-        - value
-        - qualifier
-      properties:
-        scheme:
+        email:
           type: string
-        value:
-          type: string
-        qualifier:
-          type: string
-          enum:
-            - dcterms:created
-            - dcterms:available
-            - dcterms:date
-            - dcterms:dateAccepted
-            - dcterms:dateCopyrighted
-            - dcterms:dateSubmitted
-            - dcterms:issued
-            - dcterms:modified
-            - dcterms:valid
-
-    SchemedKeyValue:
-      type: object
-      required:
-        - scheme
-        - key
-        - value
-      properties:
-        scheme:
-          type: string
-        value:
-          type: string
-        key:
-          type: string
-    # Note: it is not possible to provide examples in combination with a reference to this
-    # schema. If you need examples, you'll have to spell out the complete type.
-    StringArray:
-      type: array
-      items:
-        type: string
-    IsPreview:
-      type: boolean
-      description: Whether the resulting Agreement is a sample (true), or a final Agreement (false)
