@@ -40,7 +40,9 @@ class EasyDepositAgreementGeneratorServlet(app: EasyDepositAgreementGeneratorApp
       .flatMap(app.generateAgreement(_, response.outputStream))
       .map(_ => Ok())
       .doIfFailure {
-        case e => logger.error(e.getMessage, e)
+        case e =>
+          contentType = "text/plain"
+          logger.error(e.getMessage, e)
       }
       .getOrRecover {
         case InvalidLicenseException(msg) => BadRequest(msg)
