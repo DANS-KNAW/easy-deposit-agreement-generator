@@ -18,7 +18,7 @@ package nl.knaw.dans.easy.agreement.pdfgen
 import nl.knaw.dans.easy.agreement._
 import nl.knaw.dans.easy.agreement.fixture.{ FileSystemSupport, TestSupportFixture }
 import org.apache.commons.configuration.PropertiesConfiguration
-import org.joda.time.{ DateTime, DateTimeZone }
+import org.joda.time.{ DateTime, DateTimeZone, LocalDate }
 
 import scala.util.{ Failure, Success }
 
@@ -63,7 +63,7 @@ class V4AgreementPlaceholdersSpec extends TestSupportFixture with FileSystemSupp
           IsSample -> false,
           DansManagedDoi -> "10.17026/dans-xn3-ptsa",
           DansManagedEncodedDoi -> "10.17026%2Fdans-xn3-ptsa",
-          DateSubmitted -> "2019-12-06T14:38:00.000Z",
+          DateSubmitted -> "2019-12-06",
           Title -> "Test title",
         )
     }
@@ -72,7 +72,7 @@ class V4AgreementPlaceholdersSpec extends TestSupportFixture with FileSystemSupp
   "sampleHeader" should "yield a map of the date and title" in {
     testInstance.sampleHeader(testInput) should contain only(
       IsSample -> true,
-      DateSubmitted -> "2019-12-06T14:38:00.000Z",
+      DateSubmitted -> "2019-12-06",
       Title -> "Test title",
     )
   }
@@ -108,14 +108,21 @@ class V4AgreementPlaceholdersSpec extends TestSupportFixture with FileSystemSupp
   it should "yield a Map with embargo information when it is under embargo" in {
     testInstance.embargo(testInput.copy(dateAvailable = DateTime.now().plusDays(5))) should contain only(
       UnderEmbargo -> true,
-      DateAvailable -> DateTime.now().plusDays(5).toString("YYYY-MM-dd"),
+      DateAvailable -> LocalDate.now().plusDays(5).toString,
+    )
+  }
+
+  it should "yield a Map with non-embargo information when the embargo date is today" in {
+    testInstance.embargo(testInput.copy(dateAvailable = DateTime.now())) should contain only(
+      UnderEmbargo -> false,
+      DateAvailable -> LocalDate.now().toString,
     )
   }
 
   "termsLicenseMap" should "yield a Map with license information" in {
     inside(testInstance.termsLicenseMap(testInput)) {
       case Success(placeholderMap) =>
-        placeholderMap should contain only (
+        placeholderMap should contain only(
           TermsLicenseUrl -> "https://non-existing-license.url",
           TermsLicense -> "license",
           Appendix3 -> "/licenses/license.txt",

@@ -22,29 +22,32 @@ import scala.util.Success
 
 class AgreementInputSpec extends TestSupportFixture {
 
+  private def exampleJson(submitted: String, available: String): String = {
+    s"""{
+       |  "depositor": {
+       |    "name": "my name",
+       |    "address": "my address",
+       |    "zipcode": "my zipcode",
+       |    "city": "my city",
+       |    "country": "my country",
+       |    "organisation": "my organisation",
+       |    "phone": "my phone",
+       |    "email": "my email"
+       |  },
+       |  "doi": "10.17026/test-dans-2xg-umq8",
+       |  "title": "my first dataset",
+       |  "dateSubmitted": "$submitted",
+       |  "dateAvailable": "$available",
+       |  "accessCategory": "OPEN_ACCESS",
+       |  "license": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+       |  "sample": true,
+       |  "agreementVersion": "4.0",
+       |  "agreementLanguage": "EN"
+       |}""".stripMargin
+  }
+
   "fromJSON" should "parse a JSON representation of AgreementInput" in {
-    val json =
-      """{
-        |  "depositor": {
-        |    "name": "my name",
-        |    "address": "my address",
-        |    "zipcode": "my zipcode",
-        |    "city": "my city",
-        |    "country": "my country",
-        |    "organisation": "my organisation",
-        |    "phone": "my phone",
-        |    "email": "my email"
-        |  },
-        |  "doi": "10.17026/test-dans-2xg-umq8",
-        |  "title": "my first dataset",
-        |  "dateSubmitted": "2019-12-06T10:02:00Z",
-        |  "dateAvailable": "2019-11-06T10:02:00Z",
-        |  "accessCategory": "OPEN_ACCESS",
-        |  "license": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
-        |  "sample": true,
-        |  "agreementVersion": "4.0",
-        |  "agreementLanguage": "EN"
-        |}""".stripMargin
+    val json = exampleJson("2019-12-06", "2019-11-06")
     val expectedOutput = AgreementInput(
       depositor = Depositor(
         name = "my name",
@@ -58,14 +61,66 @@ class AgreementInputSpec extends TestSupportFixture {
       ),
       doi = "10.17026/test-dans-2xg-umq8",
       title = "my first dataset",
-      dateSubmitted = new DateTime(2019, 12, 6, 10, 2, 0, DateTimeZone.UTC),
-      dateAvailable = new DateTime(2019, 11, 6, 10, 2, 0, DateTimeZone.UTC),
+      dateSubmitted = new DateTime(2019, 12, 6, 0, 0, 0, DateTimeZone.UTC),
+      dateAvailable = new DateTime(2019, 11, 6, 0, 0, 0, DateTimeZone.UTC),
       accessCategory = AccessCategory.OPEN_ACCESS,
       license = "http://creativecommons.org/licenses/by-nc-sa/4.0/",
       sample = true,
       agreementVersion = AgreementVersion.FOUR_ZERO,
       agreementLanguage = AgreementLanguage.EN,
     )
-    AgreementInput.fromJSON(json) should matchPattern { case Success(expectedOutput) => }
+    AgreementInput.fromJSON(json) should matchPattern { case Success(`expectedOutput`) => }
+  }
+
+  it should "allow timestamped dates for 'dateSubmitted' and 'dateAvailable', but convert (floor) them to the date representation" in {
+    val json = exampleJson("2019-12-06T10:02:00Z", "2019-11-06T10:02:00Z")
+    val expectedOutput = AgreementInput(
+      depositor = Depositor(
+        name = "my name",
+        address = "my address",
+        zipcode = "my zipcode",
+        city = "my city",
+        country = "my country",
+        organisation = "my organisation",
+        phone = "my phone",
+        email = "my email",
+      ),
+      doi = "10.17026/test-dans-2xg-umq8",
+      title = "my first dataset",
+      dateSubmitted = new DateTime(2019, 12, 6, 0, 0, 0, DateTimeZone.UTC),
+      dateAvailable = new DateTime(2019, 11, 6, 0, 0, 0, DateTimeZone.UTC),
+      accessCategory = AccessCategory.OPEN_ACCESS,
+      license = "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+      sample = true,
+      agreementVersion = AgreementVersion.FOUR_ZERO,
+      agreementLanguage = AgreementLanguage.EN,
+    )
+    AgreementInput.fromJSON(json) should matchPattern { case Success(`expectedOutput`) => }
+  }
+
+  it should "allow timestamped dates with millisecond precision for 'dateSubmitted' and 'dateAvailable', but convert (floor) them to the date representation" in {
+    val json = exampleJson("2019-12-06T10:02:00.000Z", "2019-11-06T10:02:00.000Z")
+    val expectedOutput = AgreementInput(
+      depositor = Depositor(
+        name = "my name",
+        address = "my address",
+        zipcode = "my zipcode",
+        city = "my city",
+        country = "my country",
+        organisation = "my organisation",
+        phone = "my phone",
+        email = "my email",
+      ),
+      doi = "10.17026/test-dans-2xg-umq8",
+      title = "my first dataset",
+      dateSubmitted = new DateTime(2019, 12, 6, 0, 0, 0, DateTimeZone.UTC),
+      dateAvailable = new DateTime(2019, 11, 6, 0, 0, 0, DateTimeZone.UTC),
+      accessCategory = AccessCategory.OPEN_ACCESS,
+      license = "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+      sample = true,
+      agreementVersion = AgreementVersion.FOUR_ZERO,
+      agreementLanguage = AgreementLanguage.EN,
+    )
+    AgreementInput.fromJSON(json) should matchPattern { case Success(`expectedOutput`) => }
   }
 }

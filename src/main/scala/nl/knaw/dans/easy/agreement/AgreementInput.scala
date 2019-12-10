@@ -15,13 +15,15 @@
  */
 package nl.knaw.dans.easy.agreement
 
+import java.text.SimpleDateFormat
+
 import nl.knaw.dans.easy.agreement.AccessCategory.AccessCategory
 import nl.knaw.dans.easy.agreement.AgreementLanguage.AgreementLanguage
 import nl.knaw.dans.easy.agreement.AgreementVersion.AgreementVersion
-import org.joda.time.DateTime
-import org.json4s.{ DefaultFormats, Formats }
-import org.json4s.ext.{ EnumNameSerializer, JodaTimeSerializers }
+import org.joda.time.{ DateTime, LocalDate }
+import org.json4s.ext.{ DateTimeSerializer, EnumNameSerializer }
 import org.json4s.native.Serialization
+import org.json4s.{ DefaultFormats, Formats }
 
 import scala.util.{ Failure, Try }
 
@@ -55,18 +57,28 @@ object AgreementLanguage extends Enumeration {
 case class AgreementInput(depositor: Depositor,
                           doi: String,
                           title: String,
-                          dateSubmitted: DateTime,
-                          dateAvailable: DateTime,
+                          private val dateSubmitted: DateTime,
+                          private val dateAvailable: DateTime,
                           accessCategory: AccessCategory,
                           license: String,
                           sample: Boolean,
                           agreementVersion: AgreementVersion,
                           agreementLanguage: AgreementLanguage,
-                         )
+                         ) {
+  lazy val submitted: LocalDate = dateSubmitted.toLocalDate
+  lazy val available: LocalDate = dateAvailable.toLocalDate
+}
 object AgreementInput {
 
-  private implicit val jsonFormats: Formats = new DefaultFormats {} ++
-    JodaTimeSerializers.all ++
+  private object FormatsWithDate extends DefaultFormats {
+    override protected def dateFormatter: SimpleDateFormat = {
+      new SimpleDateFormat("yyyy-MM-dd") {
+        setTimeZone(DefaultFormats.UTC)
+      }
+    }
+  }
+
+  private implicit val jsonFormats: Formats = FormatsWithDate + DateTimeSerializer ++
     List(
       AccessCategory,
       AgreementVersion,

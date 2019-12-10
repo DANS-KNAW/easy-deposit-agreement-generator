@@ -84,10 +84,10 @@ components:
           type: string
         dateSubmitted:
           type: string
-          format: date-time
+          format: date
         dateAvailable:
           type: string
-          format: date-time
+          format: date
         accessCategory:
           type: string
           enum:

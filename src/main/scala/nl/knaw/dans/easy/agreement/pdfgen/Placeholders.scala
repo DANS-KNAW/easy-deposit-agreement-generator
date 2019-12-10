@@ -67,7 +67,7 @@ class V4AgreementPlaceholders(dansLogoFile: File, drivenByDataFile: File, licens
         DansManagedDoi -> input.doi,
         // the following can throw an UnsupportedEncodingException, although this is not expected to ever happen!
         DansManagedEncodedDoi -> URLEncoder.encode(input.doi, encoding.displayName()),
-        DateSubmitted -> input.dateSubmitted.toString,
+        DateSubmitted -> input.submitted.toString,
         Title -> input.title,
       )
     }
@@ -79,7 +79,7 @@ class V4AgreementPlaceholders(dansLogoFile: File, drivenByDataFile: File, licens
   def sampleHeader(input: AgreementInput): PlaceholderMap = {
     Map(
       IsSample -> boolean2Boolean(true),
-      DateSubmitted -> input.dateSubmitted.toString,
+      DateSubmitted -> input.submitted.toString,
       Title -> input.title,
     )
   }
@@ -109,10 +109,10 @@ class V4AgreementPlaceholders(dansLogoFile: File, drivenByDataFile: File, licens
   }
 
   def embargo(input: AgreementInput): PlaceholderMap = {
-    val dateAvailable = input.dateAvailable
+    val dateAvailable = input.available
     Map(
       // because Velocity requires Java objects, we transform Scala's Boolean into a Java Boolean
-      UnderEmbargo -> boolean2Boolean(new DateTime().plusMinutes(1).isBefore(dateAvailable)),
+      UnderEmbargo -> boolean2Boolean(new DateTime().plusMinutes(1).isBefore(dateAvailable.toDateTimeAtStartOfDay)),
       DateAvailable -> dateAvailable.toString("YYYY-MM-dd"),
     )
   }
