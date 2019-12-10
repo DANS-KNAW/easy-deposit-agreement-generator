@@ -15,6 +15,7 @@
  */
 package nl.knaw.dans.easy.agreement
 
+import java.io.Reader
 import java.text.SimpleDateFormat
 
 import nl.knaw.dans.easy.agreement.AccessCategory.AccessCategory
@@ -89,5 +90,9 @@ object AgreementInput {
     Serialization.read[AgreementInput](json)
   } recoverWith {
     case e => Failure(AgreementInputException(e.getMessage, e))
+  }
+
+  def fromJSON(reader: Reader): Try[AgreementInput] = Try {
+    Serialization.read[AgreementInput](reader)
   }
 }
