@@ -33,7 +33,7 @@ trait TemplateResolver {
    *
    * @param out The `OutputStream` where the filled in template is written to
    * @param map The mapping between placeholders and actual values
-   * @param encoding The encoding to be wused in writing to `out`
+   * @param encoding The encoding to be used in writing to `out`
    * @return `Success` if filling in the template succeeded, `Failure` otherwise
    */
   def createTemplate(out: OutputStream, map: PlaceholderMap, encoding: Charset = encoding): Try[Unit]
