@@ -15,10 +15,10 @@
  */
 package nl.knaw.dans.easy.agreement.pdfgen
 
-import java.io.{ File, OutputStream, OutputStreamWriter }
+import java.io.{ OutputStream, OutputStreamWriter }
 import java.nio.charset.Charset
-import java.util.Properties
 
+import better.files.File
 import nl.knaw.dans.easy.agreement.VelocityException
 import nl.knaw.dans.lib.logging.DebugEnhancedLogging
 import org.apache.velocity.VelocityContext
@@ -31,31 +31,28 @@ trait TemplateResolver {
   /**
    * Create the template and write it to `out` after filling in the placeholders with `map`.
    *
-   * @param out The `OutputStream` where the filled in template is written to
-   * @param map The mapping between placeholders and actual values
+   * @param out      The `OutputStream` where the filled in template is written to
+   * @param map      The mapping between placeholders and actual values
    * @param encoding The encoding to be used in writing to `out`
    * @return `Success` if filling in the template succeeded, `Failure` otherwise
    */
   def createTemplate(out: OutputStream, map: PlaceholderMap, encoding: Charset = encoding): Try[Unit]
 }
 
-class VelocityTemplateResolver(properties: Properties) extends TemplateResolver with DebugEnhancedLogging {
-
-  val velocityResources = new File(properties.getProperty("file.resource.loader.path"))
-  val templateFileName: String = properties.getProperty("template.file.name")
+class VelocityTemplateResolver(templateDir: File, templateFilename: String) extends TemplateResolver with DebugEnhancedLogging {
 
   logger.debug("creating template")
-  logger.debug(s"template folder: $velocityResources")
+  logger.debug(s"template folder: $templateDir")
 
-  val doc = new File(velocityResources, templateFileName)
-  assert(doc.exists(), s"file does not exist - $doc")
+  assert((templateDir / templateFilename).exists, s"template file ${ templateDir / templateFilename } does not exist")
 
-  val engine: VelocityEngine = {
-    val engine = new VelocityEngine(properties)
-    engine.init()
-    engine
+  private val engine: VelocityEngine = new VelocityEngine() {
+    setProperty("runtime.references.strict", "true")
+    setProperty("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogChute")
+    setProperty("file.resource.loader.path", templateDir.pathAsString)
+    init()
   }
-  
+
   override def createTemplate(out: OutputStream, map: PlaceholderMap, encoding: Charset): Try[Unit] = {
     logger.debug("resolve template placeholders")
 
@@ -64,7 +61,7 @@ class VelocityTemplateResolver(properties: Properties) extends TemplateResolver 
         val context = new VelocityContext
         map.foreach { case (kw, o) => context.put(kw.keyword, o) }
 
-        engine.getTemplate(templateFileName, encoding.displayName()).merge(context, writer)
+        engine.getTemplate(templateFilename, encoding.displayName()).merge(context, writer)
       })
       .tried
       .recoverWith { case e => Failure(VelocityException(e.getMessage, e)) }

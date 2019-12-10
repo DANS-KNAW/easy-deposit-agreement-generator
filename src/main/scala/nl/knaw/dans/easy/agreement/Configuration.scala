@@ -15,31 +15,21 @@
  */
 package nl.knaw.dans.easy.agreement
 
-import java.util.Properties
-
 import better.files.File
 import better.files.File.root
 import org.apache.commons.configuration.PropertiesConfiguration
 
 case class Configuration(version: String,
                          serverPort: Int,
-                         templateResources: File,
+                         private val templateResources: File,
                         ) {
 
   val templateDir: File = templateResources / "template"
+  val templateFilename: String = "Agreement.html"
   val dansLogoFile: File = templateResources / "dans_logo.png"
   val drivenByDataFile: File = templateResources / "DrivenByData.png"
   val pdfRunScript: File = templateResources / "pdfgen.sh"
   val licenses: Licenses = new Licenses(new PropertiesConfiguration((templateDir / "licenses" / "licenses.properties").toJava))
-
-  def velocityProperties: Properties = {
-    new Properties {
-      setProperty("runtime.references.strict", "true")
-      setProperty("file.resource.loader.path", templateDir.pathAsString)
-      setProperty("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogChute")
-      setProperty("template.file.name", "Agreement.html")
-    }
-  }
 }
 
 object Configuration {

@@ -17,7 +17,7 @@ package nl.knaw.dans.easy.agreement
 
 import java.io.{ ByteArrayInputStream, ByteArrayOutputStream, OutputStream }
 
-import nl.knaw.dans.easy.agreement.pdfgen.{ PdfGenerator, Placeholders, TemplateResolver, V4AgreementPlaceholders, VelocityTemplateResolver, WeasyPrintPdfGenerator }
+import nl.knaw.dans.easy.agreement.pdfgen._
 import nl.knaw.dans.lib.logging.DebugEnhancedLogging
 
 import scala.sys.process.ProcessLogger
@@ -26,7 +26,7 @@ import scala.util.Try
 class EasyDepositAgreementGeneratorApp(configuration: Configuration) extends DebugEnhancedLogging {
 
   private val placeholders: Placeholders = new V4AgreementPlaceholders(configuration.dansLogoFile, configuration.drivenByDataFile, configuration.licenses)
-  private val templateResolver: TemplateResolver = new VelocityTemplateResolver(configuration.velocityProperties)
+  private val templateResolver: TemplateResolver = new VelocityTemplateResolver(configuration.templateDir, configuration.templateFilename)
   private val pdfGenerator: PdfGenerator = new WeasyPrintPdfGenerator(configuration.pdfRunScript)
   private val processLogger: ProcessLogger = ProcessLogger(s => logger.info(s), e => logger.error(e))
 
