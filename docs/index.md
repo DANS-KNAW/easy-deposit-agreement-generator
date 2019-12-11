@@ -6,6 +6,8 @@ layout: home
 Manual
 ======
 
+Create a deposit agreement file for EASY deposits
+
 TABLE OF CONTENTS
 -----------------
 
