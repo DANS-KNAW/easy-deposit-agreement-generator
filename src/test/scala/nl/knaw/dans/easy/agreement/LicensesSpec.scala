@@ -28,4 +28,20 @@ class LicensesSpec extends TestSupportFixture {
       case Failure(InvalidLicenseException("No legal text found for http://www.invalid-license.org/licenses/LICENSE-1.0")) =>
     }
   }
+
+  "isValidLicense" should "return true if the URL occurs in the listing" in {
+    licenses.isValidLicense("http://www.apache.org/licenses/LICENSE-2.0") shouldBe true
+  }
+
+  it should "return true if the URL is listed as 'http', but the input uses 'https'" in {
+    licenses.isValidLicense("https://dans.knaw.nl/en/about/organisation-and-policy/legal-information/dans-licence.pdf") shouldBe true
+  }
+
+  it should "return false if the URL does not occur in the listing" in {
+    licenses.isValidLicense("http://www.invalid-license.org/licenses/LICENSE-1.0") shouldBe false
+  }
+
+  it should "return false if the input is not a URL" in {
+    licenses.isValidLicense("not-a-url") shouldBe false
+  }
 }

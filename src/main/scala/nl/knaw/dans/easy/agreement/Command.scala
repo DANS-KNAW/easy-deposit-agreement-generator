@@ -59,7 +59,7 @@ object Command extends App with DebugEnhancedLogging {
       .map(os =>
         inputFile
           .map(_.fileReader.apply(AgreementInput.fromJSON))
-          .getOrElse { Success(Interact.interactiveAgreementInput) }
+          .getOrElse { Success(new Interact(configuration.licenses).interactiveAgreementInput) }
           .flatMap(app.generateAgreement(_, os))
           .map(_ => "Successfully generated deposit agreement")
       )

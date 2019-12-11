@@ -38,7 +38,7 @@ class EasyDepositAgreementGeneratorApp(configuration: Configuration) extends Deb
           placeholderMap <- placeholders.inputToPlaceholderMap(input)
           _ <- templateResolver.createTemplate(templateOS, placeholderMap)
           pdfInput = new ByteArrayInputStream(templateOS.toByteArray)
-          _ = pdfGenerator.createPdf(pdfInput, pdfOutputStream).!(processLogger)
+          _ = pdfGenerator.createPdf(pdfInput, pdfOutputStream) ! processLogger
         } yield ()
       })
       .tried

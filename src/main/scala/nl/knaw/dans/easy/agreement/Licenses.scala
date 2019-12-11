@@ -38,4 +38,6 @@ class Licenses(licenses: PropertiesConfiguration) {
       .map(Success(_))
       .getOrElse(Failure(InvalidLicenseException(s"No legal text found for $url")))
   }
+
+  def isValidLicense(url: String): Boolean = licencesMap contains normalizeURL(url)
 }

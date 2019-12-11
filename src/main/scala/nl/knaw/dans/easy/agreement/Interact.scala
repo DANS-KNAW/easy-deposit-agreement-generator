@@ -21,7 +21,7 @@ import org.joda.time.LocalDate
 import scala.annotation.tailrec
 import scala.util.{ Failure, Success, Try }
 
-object Interact {
+class Interact(licenses: Licenses) {
 
   private def interactString(question: String): String = {
     print(question)
@@ -61,6 +61,15 @@ object Interact {
     }
   }
 
+  @tailrec
+  private def interactLicense(question: String): String = {
+    val input = interactString(question)
+    if (licenses.isValidLicense(input))
+      input
+    else
+      interactLicense(question)
+  }
+
   private def print(s: String): Unit = Console.err.print(s)
 
   private def println(s: String): Unit = Console.err.println(s)
@@ -76,7 +85,7 @@ object Interact {
       dateSubmitted = interactLocalDate("  date submitted: ").toDateTimeAtStartOfDay,
       dateAvailable = interactLocalDate("  date available: ").toDateTimeAtStartOfDay,
       accessCategory = interactAccessCategory("  access category: "),
-      license = interactString("  license URL: "),
+      license = interactLicense("  license URL: "),
       sample = interactBoolean("  deposit agreement is sample (true/false): "),
       agreementVersion = AgreementVersion.FOUR_ZERO,
       agreementLanguage = AgreementLanguage.EN,
