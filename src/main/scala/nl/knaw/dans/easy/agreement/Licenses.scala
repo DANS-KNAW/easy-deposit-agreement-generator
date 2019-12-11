@@ -23,14 +23,18 @@ import scala.util.{ Failure, Success, Try }
 class Licenses(licenses: PropertiesConfiguration) {
 
   private val licenseUrlPrefixRegExp = "https?://(www.)?"
-  val licencesMap: Map[String, String] = Try {
+  private val licencesMap: Map[String, String] = Try {
     licenses.getKeys.asScala.map(key =>
-      key.replaceAll(licenseUrlPrefixRegExp, "") -> s"/licenses/${ licenses.getString(key) }"
+      normalizeURL(key) -> s"/licenses/${ licenses.getString(key) }"
     ).toMap
   }.getOrElse(Map.empty)
 
+  private def normalizeURL(url: String): String = {
+    url.replaceAll(licenseUrlPrefixRegExp, "")
+  }
+
   def licenseLegalResource(url: String): Try[String] = {
-    licencesMap.get(url.replaceAll(licenseUrlPrefixRegExp, ""))
+    licencesMap.get(normalizeURL(url))
       .map(Success(_))
       .getOrElse(Failure(InvalidLicenseException(s"No legal text found for $url")))
   }
