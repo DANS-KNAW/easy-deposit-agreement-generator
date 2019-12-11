@@ -34,7 +34,7 @@ class Interact(licenses: Licenses) {
     Try { input.toBoolean } match {
       case Success(value) => value
       case Failure(_) =>
-        println("invalid input, please enter a boolean ('true' or 'false')")
+        println("    >> invalid input, please enter a boolean ('true' or 'false')")
         interactBoolean(question)
     }
   }
@@ -45,7 +45,7 @@ class Interact(licenses: Licenses) {
     Try { LocalDate.parse(input) } match {
       case Success(value) => value
       case Failure(_) =>
-        println("invalid input, please enter a valid date (yyyy-MM-dd)")
+        println("    >> invalid input, please enter a valid date (yyyy-MM-dd)")
         interactLocalDate(question)
     }
   }
@@ -56,7 +56,7 @@ class Interact(licenses: Licenses) {
     Try { AccessCategory.withName(input) } match {
       case Success(value) => value
       case Failure(_) =>
-        println("invalid input, please enter a valid access category")
+        println("    >> invalid input, please enter a valid access category")
         interactAccessCategory(question)
     }
   }
@@ -66,8 +66,10 @@ class Interact(licenses: Licenses) {
     val input = interactString(question)
     if (licenses.isValidLicense(input))
       input
-    else
+    else {
+      println("    >> invalid input, please enter a valid license URL")
       interactLicense(question)
+    }
   }
 
   private def print(s: String): Unit = Console.err.print(s)
