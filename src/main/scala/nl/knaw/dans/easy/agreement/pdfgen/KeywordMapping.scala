@@ -25,7 +25,6 @@ case object DrivenByData          extends KeywordMapping { val keyword = "Driven
 // header data
 case object IsSample              extends KeywordMapping { val keyword = "IsSample" }
 case object DansManagedDoi        extends KeywordMapping { val keyword = "DansManagedDoi" }
-case object DansManagedEncodedDoi extends KeywordMapping { val keyword = "DansManagedEncodedDoi" }
 case object DateSubmitted         extends KeywordMapping { val keyword = "DateSubmitted" }
 case object Title                 extends KeywordMapping { val keyword = "Title" }
 

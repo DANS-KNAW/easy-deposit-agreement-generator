@@ -57,16 +57,12 @@ class V4AgreementPlaceholdersSpec extends TestSupportFixture with FileSystemSupp
   )
 
   "header" should "yield a map of the DOI, date and title" in {
-    inside(testInstance.header(testInput)) {
-      case Success(placeholderMap) =>
-        placeholderMap should contain only(
-          IsSample -> false,
-          DansManagedDoi -> "10.17026/dans-xn3-ptsa",
-          DansManagedEncodedDoi -> "10.17026%2Fdans-xn3-ptsa",
-          DateSubmitted -> "2019-12-06",
-          Title -> "Test title",
-        )
-    }
+    testInstance.header(testInput) should contain only(
+      IsSample -> false,
+      DansManagedDoi -> "10.17026/dans-xn3-ptsa",
+      DateSubmitted -> "2019-12-06",
+      Title -> "Test title",
+    )
   }
 
   "sampleHeader" should "yield a map of the date and title" in {

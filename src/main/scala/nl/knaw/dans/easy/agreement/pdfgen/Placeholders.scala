@@ -16,7 +16,6 @@
 package nl.knaw.dans.easy.agreement.pdfgen
 
 import java.io.{ File => JFile }
-import java.net.URLEncoder
 
 import better.files.File
 import nl.knaw.dans.easy.agreement._
@@ -38,13 +37,13 @@ class V4AgreementPlaceholders(dansLogoFile: File, drivenByDataFile: File, licens
     logger.debug("create placeholder map")
 
     val placeholderMap = for {
-      headerMap <- if (input.sample) Try { sampleHeader(input) }
-                   else header(input)
       dansLogo <- encodeImage(DansLogo, dansLogoFile)
       drivenByData <- encodeImage(DrivenByData, drivenByDataFile)
+      termsLicenseMap <- termsLicenseMap(input)
+      headerMap = if (input.sample) sampleHeader(input)
+                  else header(input)
       depositorMap = depositor(input.depositor)
       openAccess = OpenAccess -> boolean2Boolean(isOpenAccess(input))
-      termsLicenseMap <- termsLicenseMap(input)
       embargoMap = embargo(input)
     } yield headerMap + dansLogo + drivenByData ++ depositorMap + openAccess ++ termsLicenseMap ++ embargoMap
 
@@ -60,20 +59,13 @@ class V4AgreementPlaceholders(dansLogoFile: File, drivenByDataFile: File, licens
       })
   }
 
-  def header(input: AgreementInput): Try[PlaceholderMap] = {
-    val map: Try[PlaceholderMap] = Try {
-      Map(
-        IsSample -> boolean2Boolean(false),
-        DansManagedDoi -> input.doi,
-        // the following can throw an UnsupportedEncodingException, although this is not expected to ever happen!
-        DansManagedEncodedDoi -> URLEncoder.encode(input.doi, encoding.displayName()),
-        DateSubmitted -> input.submitted.toString,
-        Title -> input.title,
-      )
-    }
-    map recoverWith {
-      case e => Failure(PlaceholderException(e.getMessage, Option(e)))
-    }
+  def header(input: AgreementInput): PlaceholderMap = {
+    Map(
+      IsSample -> boolean2Boolean(false),
+      DansManagedDoi -> input.doi,
+      DateSubmitted -> input.submitted.toString,
+      Title -> input.title,
+    )
   }
 
   def sampleHeader(input: AgreementInput): PlaceholderMap = {
