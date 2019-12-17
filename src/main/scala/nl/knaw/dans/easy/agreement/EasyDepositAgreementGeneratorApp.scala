@@ -34,7 +34,7 @@ class EasyDepositAgreementGeneratorApp(configuration: Configuration) extends Deb
     trace(input)
     resource.managed(new ByteArrayOutputStream())
       .map(templateOS => {
-        if (contentType.contains("html"))
+        if (contentType.contains("/html"))
           for {
             placeholderMap <- placeholders.inputToPlaceholderMap(input)
             _ = logger.info(s"generating HTML: $contentType")

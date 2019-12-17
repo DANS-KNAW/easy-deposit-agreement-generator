@@ -126,5 +126,4 @@ object Placeholders {
   } recoverWith {
     case e => Failure(PlaceholderException(e.getMessage, Option(e)))
   }
-
 }
