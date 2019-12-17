@@ -21,7 +21,7 @@ class TemplateMapSpec extends TestSupportFixture
 
   private val templateDir = testDir / "template"
 
-  // TODO a proper integration test starts with json to test it matches the template variations
+  // TODO a proper integration test starts with AgreementInput to test it matches the template variations
   def placeholderMap(isOpenAccess: Boolean, isSample: Boolean, available: Int): PlaceholderMap = Map(
     IsSample -> isSample.asInstanceOf[Object],
     OpenAccess -> isOpenAccess.asInstanceOf[Object],
