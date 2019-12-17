@@ -78,8 +78,8 @@ class TemplateMapSpec extends TestSupportFixture
                 else ""
     val part1 = if (map(UnderEmbargo).asInstanceOf[Boolean]) "embargo-"
                 else ""
-    val part3 = if (map(OpenAccess).asInstanceOf[Boolean]) "OA"
-                else "RA"
+    val part3 = if (map(OpenAccess).asInstanceOf[Boolean]) "open"
+                else "restricted"
     s"$testDir/$part1$part2$part3.html"
   }
 }
