@@ -34,10 +34,11 @@ class EasyDepositAgreementGeneratorServlet(app: EasyDepositAgreementGeneratorApp
   }
 
   post("/agreement") {
-    contentType = "application/pdf"
+    contentType = if (request.getHeader("Accept") .contains("/html")) "text/html"
+      else "application/pdf"
 
     AgreementInput.fromJSON(request.body)
-      .flatMap(app.generateAgreement(_, response.outputStream))
+      .flatMap(app.generateAgreement(_, response.outputStream, request.getHeader("Accept")))
       .map(_ => Ok())
       .doIfFailure {
         case e =>

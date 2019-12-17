@@ -64,13 +64,6 @@ footer p:first-child {
     text-align: right;
     background-color: #FFF;
 }
-@media print {
-  footer {
-    position: fixed;
-    bottom: 0;
-    padding-top: 18em;
-  }
-}
 .choice, .choice-header {
     padding-left: 5em;
 }
