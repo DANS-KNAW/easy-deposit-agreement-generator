@@ -58,7 +58,7 @@ object Command extends App with DebugEnhancedLogging {
       .getOrElse(managed(Console.out))
       .map(os =>
         inputFile
-          .map(_.fileReader.apply(AgreementInput.fromJSON))
+          .map(_.fileReader.apply(AgreementInput.fromJSON(_)))
           .getOrElse { Success(new Interact(configuration.licenses).interactiveAgreementInput) }
           .flatMap(app.generateAgreement(_, os))
           .map(_ => "Successfully generated deposit agreement")
