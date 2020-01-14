@@ -43,7 +43,7 @@ paths:
         - agreement
       summary: Returns a Deposit Agreement based on the provided JSON
       requestBody:
-        description: JSON document containing the agreement request
+        description: JSON document containing the agreement request. Please note that this document is not validated by the server.
         required: true
         content:
           application/json:
