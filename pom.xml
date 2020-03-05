@@ -72,7 +72,6 @@
         <dependency>
             <groupId>nl.knaw.dans.lib</groupId>
             <artifactId>dans-scala-lib_2.12</artifactId>
-            <version>1.6.1</version>
         </dependency>
 
         <!-- Apache Commons -->
@@ -87,7 +86,6 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.13</version>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
@@ -111,7 +109,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
         </dependency>
 
         <!-- json -->
