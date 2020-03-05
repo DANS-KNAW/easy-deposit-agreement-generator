@@ -35,13 +35,14 @@ paths:
                 description: a plain text, human readable description of the service
                 example: |
                   EASY Deposit Agreement Generator Service running (v1.0.0)
-        500:
-          description: Service is unavailable because of an error.
+
   /agreement:
     post:
+      tags:
+        - agreement
       summary: Returns a Deposit Agreement based on the provided JSON
       requestBody:
-        description: JSON document containing the agreement request
+        description: JSON document containing the agreement request. Please note that this document is not validated by the server.
         required: true
         content:
           application/json:
@@ -52,14 +53,13 @@ paths:
           description: OK
           content:
             'application/pdf': {}
+            'application/html': {}
+        400:
+          description: The input JSON could not be parsed correctly.
         500:
-          $ref: "#/components/responses/InternalServerError"
+          description: Internal Server Error.
 
 components:
-  responses:
-    InternalServerError:
-      description: Internal Server Error.
-
   schemas:
     AgreementRequest:
       type: object
@@ -101,6 +101,8 @@ components:
             - OPEN_ACCESS
         license:
           type: string
+          format: url
+          description: The license to be used. A list of valid license URLs can be found at https://github.com/DANS-KNAW/easy-licenses/tree/master/src/main/resources/licenses/licenses.properties
         sample:
           type: boolean
           description: Whether the resulting Agreement is a sample (true), or a final Agreement (false)

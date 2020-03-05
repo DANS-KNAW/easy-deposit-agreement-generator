@@ -15,7 +15,6 @@
  */
 package nl.knaw.dans.easy.agreement
 
-import java.io.Reader
 import java.text.SimpleDateFormat
 
 import nl.knaw.dans.easy.agreement.AccessCategory.AccessCategory
@@ -24,7 +23,7 @@ import nl.knaw.dans.easy.agreement.AgreementVersion.AgreementVersion
 import org.joda.time.{ DateTime, LocalDate }
 import org.json4s.ext.{ DateTimeSerializer, EnumNameSerializer }
 import org.json4s.native.Serialization
-import org.json4s.{ DefaultFormats, Formats }
+import org.json4s.{ DefaultFormats, Formats, JsonInput }
 
 import scala.util.{ Failure, Try }
 
@@ -86,13 +85,9 @@ object AgreementInput {
       AgreementLanguage,
     ).map(new EnumNameSerializer(_))
 
-  def fromJSON(json: String): Try[AgreementInput] = Try {
+  def fromJSON(json: JsonInput): Try[AgreementInput] = Try {
     Serialization.read[AgreementInput](json)
   } recoverWith {
     case e => Failure(AgreementInputException(e.getMessage, e))
-  }
-
-  def fromJSON(reader: Reader): Try[AgreementInput] = Try {
-    Serialization.read[AgreementInput](reader)
   }
 }
