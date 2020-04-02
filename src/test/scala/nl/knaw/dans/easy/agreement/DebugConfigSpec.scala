@@ -17,11 +17,12 @@ package nl.knaw.dans.easy.agreement
 
 import better.files.File
 import org.apache.commons.configuration.PropertiesConfiguration
-import org.scalatest.{ FlatSpec, Matchers }
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.collection.JavaConverters._
 
-class DebugConfigSpec extends FlatSpec with Matchers {
+class DebugConfigSpec extends AnyFlatSpec with Matchers {
 
   private val configDir = File("src/main/assembly/dist/cfg")
   private val debugConfigDir = File("src/test/resources/debug-config")
